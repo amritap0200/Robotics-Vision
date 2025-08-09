@@ -1,0 +1,16 @@
+# Python Packages
+opencv-python==4.9.0.80
+numpy==1.26.4
+urllib3==2.2.1
+requests==2.31.0             
+
+# MANUAL DOWNLOADS
+# 1. Face Detection:
+#    - Download haarcascade_frontalface_default.xml from:
+#      https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml
+#
+# 2. Object Detection:
+#    - Download YOLOv3 files:
+#      - yolov3.cfg: https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg
+#      - yolov3.weights: https://data.pjreddie.com/files/yolov3.weights
+#      - coco.names: https://github.com/pjreddie/darknet/blob/master/data/coco.names
