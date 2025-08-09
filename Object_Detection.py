@@ -4,28 +4,24 @@ import urllib.request
 import os
 import time
 
-# Configuration
 url = 'http://192.168.43.219/cam-hi.jpg'
 whT = 320
 confThreshold = 0.5
 nmsThreshold = 0.3
 
-# Function to get output layer names
 def get_output_layers(net):
     layerNames = net.getLayerNames()
     return [layerNames[i-1] for i in net.getUnconnectedOutLayers().flatten()]
 
-# Load class names
-classesfile = r"C:\Users\amrit\Downloads\coco.names"
+classesfile = r"Coco_dataset_downloadpath"
 if not os.path.exists(classesfile):
     raise FileNotFoundError(f"{classesfile} not found! Download it first.")
 
 with open(classesfile, 'rt') as f:
     classNames = f.read().rstrip('\n').split('\n')
 
-# Load YOLO model
-modelConfig = r"C:\Users\amrit\Downloads\yolov3.cfg"
-modelWeights = r"C:\Users\amrit\Downloads\yolov3.weights"
+modelConfig = r"yolov3.cfg_filepath"
+modelWeights = r"yolov3.weights_filepath"
 
 if not os.path.exists(modelConfig):
     raise FileNotFoundError(f"{modelConfig} not found! Download from GitHub.")
@@ -36,7 +32,6 @@ net = cv2.dnn.readNetFromDarknet(modelConfig, modelWeights)
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
-# ===== TEST WITH LAPTOP WEBCAM =====
 print("Testing with laptop webcam (press 'q' to continue to ESP32-CAM)...")
 cap = cv2.VideoCapture(0)  # 0 for default camera
 
@@ -51,7 +46,6 @@ while True:
     outputNames = get_output_layers(net)
     outputs = net.forward(outputNames)
     
-    # Process detections
     hT, wT, cT = im.shape
     bbox = []
     classIds = []
@@ -108,13 +102,11 @@ while True:
         time.sleep(1)
         continue
     
-    # Object detection
     blob = cv2.dnn.blobFromImage(im, 1/255, (whT,whT), [0,0,0], 1, crop=False)
     net.setInput(blob)
     outputNames = get_output_layers(net)
     outputs = net.forward(outputNames)
     
-    # Rest of your detection processing...
     hT, wT, cT = im.shape
     bbox = []
     classIds = []
@@ -144,5 +136,6 @@ while True:
     cv2.imshow('ESP32-CAM Object Detection', im)
     if cv2.waitKey(1) == ord('q'):
         break
+
 
 cv2.destroyAllWindows()
